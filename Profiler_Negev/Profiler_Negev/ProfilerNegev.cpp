@@ -93,11 +93,19 @@ void PRO_END(WCHAR* pName) // END
 			g_proArr[i]._min[1] = g_proArr[i]._min[0];
 			g_proArr[i]._min[0] = diffTime;
 		}
+		else if (g_proArr[i]._min[1] > diffTime)
+		{
+			g_proArr[i]._min[1] = diffTime;
+		}
 
 		if (g_proArr[i]._max[0] < diffTime)
 		{
 			g_proArr[i]._max[1] = g_proArr[i]._max[0];
 			g_proArr[i]._max[0] = diffTime;
+		}
+		else if (g_proArr[i]._max[1] < diffTime)
+		{
+			g_proArr[i]._max[1] = diffTime;
 		}
 
 		// end 나갈때 begin 0으로. 나중에 begin 두번 연속 선언할때 감지ㅣ
@@ -155,10 +163,14 @@ void SaveProfile()
 		{
 			min = (double)g_proArr[i]._min[0] / g_freq;
 		}
+		else if (g_proArr[i]._count == 2 && g_proArr[i]._min[0] != g_proArr[i]._min[1])
+		{
+			min = (double)g_proArr[i]._min[0] / g_freq;
+		}
 		else
 		{
 			min = (double)g_proArr[i]._min[1] / g_freq;
-			minusValue += (double)g_proArr[i]._min[1];
+			minusValue += (double)g_proArr[i]._min[0];
 			g_proArr[i]._count--;
 		}
 
@@ -166,10 +178,14 @@ void SaveProfile()
 		{
 			max = (double)g_proArr[i]._max[0] / g_freq;
 		}
+		else if (g_proArr[i]._count == 2 && g_proArr[i]._max[0] != g_proArr[i]._max[1])
+		{
+			max = (double)g_proArr[i]._max[0] / g_freq;
+		}
 		else
 		{
 			max = (double)g_proArr[i]._max[1] / g_freq;
-			minusValue += (double)g_proArr[i]._max[1];
+			minusValue += (double)g_proArr[i]._max[0];
 			g_proArr[i]._count--;
 		}
 
@@ -184,6 +200,8 @@ void SaveProfile()
 		// 한줄씩 파일에 쓰기
 		fputws(tempWchar, fp);
 	}
+
+	fclose(fp);
 }
 
 int main(void)
@@ -225,6 +243,38 @@ int main(void)
 		Sleep(0);
 		wprintf(L"%d\n", i);
 		P_END(L"five");
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		P_BEGIN(L"six");
+		Sleep(0);
+		wprintf(L"%d\n", i);
+		P_END(L"six");
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		P_BEGIN(L"seven");
+		Sleep(0);
+		wprintf(L"%d\n", i);
+		P_END(L"seven");
+	}
+
+	for (int i = 0; i < 6; i++)
+	{
+		P_BEGIN(L"eight");
+		Sleep(0);
+		wprintf(L"%d\n", i);
+		P_END(L"eight");
+	}
+
+	for (int i = 0; i < 7; i++)
+	{
+		P_BEGIN(L"nine");
+		Sleep(0);
+		wprintf(L"%d\n", i);
+		P_END(L"nine");
 	}
 
 	P_SAVE();
